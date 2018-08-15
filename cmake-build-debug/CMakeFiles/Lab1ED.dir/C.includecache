@@ -1,0 +1,20 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/Joaopedro/CLionProjects/Lab1ED/jogadores.c
+stdio.h
+-
+stdlib.h
+-
+time.h
+-
+jogadores.h
+/Users/Joaopedro/CLionProjects/Lab1ED/jogadores.h
+
+/Users/Joaopedro/CLionProjects/Lab1ED/jogadores.h
+
