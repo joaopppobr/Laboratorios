@@ -1,1 +1,1 @@
-# Lab 1: Tipos	Abstratos	de	Dados	
+# Tipos	Abstratos	de	Dados	
