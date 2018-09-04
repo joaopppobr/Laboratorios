@@ -1,0 +1,82 @@
+\ProvidesPackage{naturaldeduction}
+
+\usepackage{multirow}
+\usepackage{ifthen}
+
+\newcounter{proof-counter}
+\newcounter{close}
+\newcounter{in-assumption}
+\newcounter{assumption-depth}
+
+\newcommand{\firstcolumn}{1.7in}
+\newcommand{\secondcolumn}{1in}
+\renewcommand{\arraystretch}{1.25}
+
+\newcommand{\forloop}[5][1]%
+    {%
+    \setcounter{#2}{#3}%
+    \ifthenelse{#4}%
+        {% 
+            #5%
+            \addtocounter{#2}{#1}%
+            \forloop[#1]{#2}{\value{#2}}{#4}{#5}%
+        }% 
+    % Else
+        {% 
+        }% 
+    }%
+
+\providecommand{\assumption}[2]
+    {\ifthenelse
+        {\value{in-assumption} = 0}
+            {\outerassumption{#1}{#2}}
+            {\innerassumption{#1}{#2}}}
+
+\providecommand{\outerassumption}[2]
+    {
+      \setcounter{in-assumption}{1}
+      \arabic{proof-counter}\addtocounter{proof-counter}{1}
+     && \multicolumn{2}{l}{
+        \multirow{#1}{*}{
+        \hspace*{\value{assumption-depth}pt}\addtocounter{assumption-depth}{-1}
+            \begin{tabular}{|p{0pt}@{\hspace{9pt}}p{\firstcolumn}p{\secondcolumn}p{0pt}|}\hline
+                #2 \hline
+            \end{tabular}\addtocounter{assumption-depth}{-6}
+        }
+    }  \\ \forloop{close}{1}{\value{close} < #1}{\arabic{proof-counter} \\ \addtocounter{proof-counter}{1}}
+    \addtocounter{assumption-depth}{7}
+    \setcounter{in-assumption}{0}
+    }
+
+\providecommand{\innerassumption}[2]
+    {
+        & \multicolumn{2}{l}{
+          \multirow{#1}{*}{
+          \hspace*{\value{assumption-depth}pt}\addtocounter{assumption-depth}{2}
+          \begin{tabular}{|p{0pt}@{\hspace{3pt}}p{\firstcolumn}p{\secondcolumn}p{0pt}|}\hline
+            #2 \hline
+          \end{tabular}\addtocounter{assumption-depth}{-2}
+        }
+        } &\\ \forloop{close}{1}{\value{close} < #1}{&&&\\}}
+
+\newenvironment{proof}[2]
+    {
+        \setcounter{proof-counter}{1}
+        \setcounter{assumption-depth}{-21}
+        \renewcommand{\firstcolumn}{#1}
+        \renewcommand{\secondcolumn}{#2}
+        \begin{tabular}{rp{0pt}p{\firstcolumn}p{\secondcolumn}}
+    }
+    {
+        \end{tabular} \\
+    }
+
+\providecommand{\ostate}[2]{ \arabic{proof-counter} && #1 & #2 \\ \addtocounter{proof-counter}{1} }
+\providecommand{\astate}[2]{ & #1 & #2 & \\}
+\providecommand{\state}[2]
+    {\ifthenelse
+        {\value{in-assumption} = 0}
+            {\ostate{#1}{#2}}
+            {\astate{#1}{#2}}}
+
+

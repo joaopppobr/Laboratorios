@@ -1,0 +1,118 @@
+\documentclass[12pt]{article}
+\usepackage[latin1]{inputenc}
+\usepackage{times}
+\usepackage{enumerate}
+\usepackage{fullpage}
+\usepackage{graphicx}
+\usepackage{naturaldeduction}
+\usepackage{color}
+
+\begin{document}
+
+\noindent
+Universidade Federal do Rio Grande do Sul \hfill Instituto de Informática \newline 
+INF05508 -- Lógica para Computação \hfill 2018/2 \newline
+Aluno \hfill João Pedro Porto Pires de Oliveira
+\rule{\linewidth}{1.pt}
+
+\begin{center}
+	\Large\textbf{Exercício EAD, 04/09/2018} 
+\end{center}
+
+\section*{Dedução Natural}
+
+\subsection*{Questão 1.} Prove os seguintes sequentes usando dedução natural:
+
+\begin{enumerate}[(a)]
+	\item $\neg (\neg p \lor q) \vdash p$.
+\end{enumerate}
+
+{\color{blue}
+	\begin{proof}{60pt}{80pt}
+		\state{$\neg (\neg p \lor q)$}{PREMISSA}
+		\assumption{3}{
+		\state{$\neg p$}{HIPOTESE}
+		\state{$\neg p \lor q$}{$\lor_i$ 2}
+		\state{$\bot$}{$\neg_e$1,3}
+		}
+		\state{$\neg \neg p$}{$\neg_e$ 2-4}
+		\state{$p$}{$\neg \neg_e$ 5}
+	\end{proof}
+}
+
+\begin{enumerate}[(b)]
+	\item $p \land \neg q \to r, \neg r, p \vdash q$.
+\end{enumerate}
+{\color{blue}
+	\begin{proof}{60pt}{80pt}
+		\state {$p \land q \to r$}{PREMISSA}
+		\state{$\neg r$}{PREMISSA}
+		\state{$p$}{PREMISSA}
+		\assumption{4}{
+	    \state{$\neg q$}{HIPOTESE}
+	    \state{$p \land \neg q$}{$\land_i$ 3,4}
+	    \state{$r$}{$\to_e$ 1,5}
+	    \state{$\bot$}{$\neg_e$ 2,6}		
+    }
+    \state{$q$}{$\neg_i$ 4-7}
+	\end{proof}
+}
+
+\begin{enumerate}[(c)]
+	\item $(p \lor q) \lor r \vdash p \lor (q \lor r)$.
+\end{enumerate}
+{\color{blue}
+	\begin{proof}{60pt}{80pt}
+		\state{$(p \lor q) \lor r$}{PREMISSA}
+		\assumption{7}{
+		  \state{$p \lor q$}{HIPOTESE}
+		  \assumption{2}{
+		    \state{$p$}{HIPOTESE}
+		    \state{$p \lor (q \lor r)$}{$\lor_i$ 3}
+		  }
+		  \assumption{3}{
+		    \state{$q$}{HIPOTESE}
+		    \state{$q \lor r$}{$\lor_i$ 5}
+		    \state{$p \lor (q \lor q)$}{$\lor_i$6}
+		  }
+		  \state{$p \lor(q \lor r)$}{$\lor_e$2, 3-4, 5-7}
+		}
+		\assumption{2}{
+		  \state{$r$}{HIPOTESE}
+		  \state{$(p \lor q) \lor r$}{$\lor_i$ 9}
+		}
+		\state{$(p \lor q) \lor r$}{$\lor_e$2, 2-8, 9-10}
+	\end{proof}
+}
+
+\begin{enumerate}[(d)]
+	\item $(p \land q) \lor (p \land r) \vdash p \land (q \lor r)$.
+\end{enumerate}
+{\color{blue}
+	\begin{proof}{60pt}{80pt}
+	\state{$(p \land q) \lor (p \land r)$}{PREMISSA}
+	\assumption{2}{
+	  \state{$p \land q$}{HIPOTESE}
+	  \state{$p$}{$\land_e$1,2}
+	}
+	\assumption{2}{
+	  \state{$p \land r$}{HIPOTESE}
+	  \state{$p$}{$\land_e$1,4}
+	}
+	\state{$p$}{$\lor_e$1, 2-3, 4-5}
+	\assumption{3}{
+	  \state{$p \land q$}{HIPOTESE}
+	  \state{$q$}{$\land$2, 7}
+	  \state{$q \lor r$}{$\lor_i$8}
+	}
+	\assumption{3}{
+	  \state{$p \land r$}{HIPOTESE}
+	  \state{$r$}{$\land_e$2, 10}
+	  \state{$q \lor r$}{$\lor_i$11}
+	}
+	\state{$q \lor r$}{$\lor_e$1, 7-9, 10-12}
+	\state{$p \land (q \lor r)$}{$\land_i$6,13}
+	\end{proof}
+}
+
+\end{document}
