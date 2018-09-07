@@ -1,0 +1,65 @@
+LDR A #0
+STR A XF
+STR A YF
+
+
+LDR A X0
+STR A XF
+LDR A Y0
+STR A YF
+
+retornaPosicao:
+	LDR A D,X
+	JN fim
+	LDR A DS,X
+	JZ somaX
+	SUB A #1
+	JZ somaY
+	ADD A #1
+	SUB A #128
+	JZ subX
+	ADD A #128
+	SUB A #129
+	JZ subY
+	ADD A #129
+	JMP somaY
+	ADD X #2
+	JMP retornaPosicao
+
+somaX:
+	LDR A XF
+	ADD A D,X
+	STR A XF
+	ADD X #2
+	JMP retornaPosicao
+somaY:
+	LDR A YF
+	ADD A D,X
+	STR A YF
+	ADD X #2
+	JMP retornaPosicao
+subX:
+	LDR A XF
+	SUB A D,X
+	STR A XF
+	ADD X #2
+	JMP retornaPosicao
+subY:
+	LDR A YF
+	SUB A D,X
+	STR A YF
+	ADD X #2
+	JMP retornaPosicao
+fim:
+	HLT
+
+ORG 224
+X0: DB 0
+Y0: DB 0
+DS: DB 0
+D: DB 0
+
+ORG 253
+DS14: DB 0
+XF: DB 0
+YF: DB 0
