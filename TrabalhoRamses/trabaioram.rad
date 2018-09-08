@@ -10,13 +10,10 @@ retornaPosicao:
 	JZ somaX
 	SUB A #1
 	JZ somaY
-	ADD A #1
-	SUB A #128
+	SUB A #127
 	JZ subX
-	ADD A #128
-	SUB A #129
+	SUB A #1
 	JZ subY
-	ADD A #129
 	JMP retornaPosicao
 
 somaX:
