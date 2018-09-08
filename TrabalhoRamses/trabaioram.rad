@@ -1,45 +1,45 @@
-LDR A X0
+LDR A X0	;Atribui às posições finais as posições iniciais
 STR A XF
 LDR A Y0
 STR A YF
 
-retornaPosicao:
-	LDR A D,X
-	JN fim
-	LDR A DS,X
-	JZ somaX
+retornaDirecao:	;Faz os testes para definir a direção do movimento
+	LDR A D,X		;Carrega o valor Di e testa se ele é negativo (A cada loop soma-se 2 ao registrador X, para que possam ser lidas todas as instruções de entrada)
+	JN fim	;Caso negativo, termina o programa
+	LDR A DS,X	
+	JZ somaX	;Se DS = 0, realiza a soma em X
 	SUB A #1
-	JZ somaY
+	JZ somaY	;Se DS = 1, realiza a soma em Y
 	SUB A #127
-	JZ subX
+	JZ subX	;Se DS = 128, realiza a subtração em X
 	SUB A #1
-	JZ subY
-	HLT
+	JZ subY	;Se DS = 129, realiza a subtração em Y
+	HLT	;Caso nenhuma das condições acima se satisfassa, termina o programa
 
-somaX:
+somaX:	;Soma à posição X o número de movimentos a serem executados
 	LDR A XF
 	ADD A D,X
 	STR A XF
 	ADD X #2
-	JMP retornaPosicao
-somaY:
+	JMP retornaDirecao
+somaY:	;Soma à posição Y o número de movimentos a serem executados
 	LDR A YF
 	ADD A D,X
 	STR A YF
 	ADD X #2
-	JMP retornaPosicao
-subX:
+	JMP retornaDirecao
+subX:	;Subtrai da posição X o número de movimentos a serem executados
 	LDR A XF
 	SUB A D,X
 	STR A XF
 	ADD X #2
-	JMP retornaPosicao
-subY:
+	JMP retornaDirecao
+subY:	;Subtrai da posição Y o número de movimentos a serem executados
 	LDR A YF
 	SUB A D,X
 	STR A YF
 	ADD X #2
-	JMP retornaPosicao
+	JMP retornaDirecao
 fim:
 	HLT
 
