@@ -55,6 +55,5 @@ DS: DB 0
 D: DB 0
 
 ORG 253
-DS14: DB 0
 XF: DB 0
 YF: DB 0
