@@ -54,6 +54,6 @@ Y0: DB 0
 DS: DB 0
 D: DB 0
 
-ORG 253
+ORG 254
 XF: DB 0
 YF: DB 0
