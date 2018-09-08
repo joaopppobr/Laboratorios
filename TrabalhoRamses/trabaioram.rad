@@ -14,7 +14,7 @@ retornaPosicao:
 	JZ subX
 	SUB A #1
 	JZ subY
-	JMP retornaPosicao
+	HLT
 
 somaX:
 	LDR A XF
