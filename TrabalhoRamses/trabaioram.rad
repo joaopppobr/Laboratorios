@@ -1,8 +1,3 @@
-LDR A #0
-STR A XF
-STR A YF
-
-
 LDR A X0
 STR A XF
 LDR A Y0
