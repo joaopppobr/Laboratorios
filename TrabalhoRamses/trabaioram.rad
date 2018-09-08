@@ -17,8 +17,6 @@ retornaPosicao:
 	SUB A #129
 	JZ subY
 	ADD A #129
-	JMP somaY
-	ADD X #2
 	JMP retornaPosicao
 
 somaX:
