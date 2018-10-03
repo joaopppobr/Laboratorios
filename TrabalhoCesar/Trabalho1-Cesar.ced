@@ -644,10 +644,35 @@ deleta_direcao:
 
 salva_direcao:
 	mov		r0,direcao
-	jmp		fim
+	jmp		exibe_info
 
 exibe_info:
-	
+	mov		#putmsg,r5
+	clr		r1
+	mov		#msg_limpa,r0
+	jsr		r7,_SISTEMA
+
+	clr		conta_posicao
+
+	mov		#28,pos
+
+	mov		#putmsg,r5
+	clr		r1
+	mov		#msg_eixo,r0
+	jsr		r7,_SISTEMA
+
+	mov		#putmsg,r5
+	mov		#9,pos
+	mov		pos,r1
+	mov		#msg_sentido,r0
+	jsr		r7,_SISTEMA
+
+	mov		#putmsg,r5
+	mov		#21,pos
+	mov		pos,r1
+	mov		#msg_coord,r0
+	jsr		r7,_SISTEMA
+
 fim:
 	hlt
 	
@@ -657,13 +682,16 @@ msg_nome:	dab		'Joao Pedro Oliveira 304317', 0
 msg_limpa:	dab		'                                           ', 0
 msg_inicialx:	dab		'Insira a coordenada inicial X:', 0
 msg_inicialy:	dab		'Insira a coordenada inicial Y:       ', 0
-msg_direcao:		dab		'Direcao e sentido (W/A/S/D):'
+msg_direcao:		dab		'Direcao e sentido (W/A/S/D):',0
+msg_eixo:		dab		'Eixo:',0
+msg_sentido:		dab		'Sentido:',0
+msg_coord:		dab		'Coord:',0
 deleta:		dab		' ',0
 posicao_cursor:	dab	'_',0
 
 pos:	dw		0
 
-ORG	4998
+ORG	25000
 
 conta_posicao:	dw	0
 
@@ -672,7 +700,7 @@ inicial_x_cen:	dw	0
 inicial_x_dez:	dw	0
 inicial_x_uni:	dw	0
 
-inicial_x_cen_ASCII:	dab	' ',0
+inicial_x_cent_ASCII:	dab	' ',0
 inicial_x_dez_ASCII:	dab	' ',0
 inicial_x_uni_ASCII:	dab	' ',0
 
@@ -684,10 +712,11 @@ inicial_y_dez:	dw	0
 inicial_y_uni:	dw	0
 
 
-inicial_y_cen_ASCII:	dab	' ',0
+inicial_y_cent_ASCII:	dab	' ',0
 inicial_y_dez_ASCII:	dab	' ',0
 inicial_y_uni_ASCII:	dab	' ',0
 
 inicial_y:	dw	0
 
 direcao:	dab	' ',0
+
