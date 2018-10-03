@@ -742,47 +742,62 @@ exibe_info:
 
 	jmp		testa_direcao
 	continuacao_exibir:
-		
+		mov		#6,pos
+		mov		pos,r1
+		mov 		direcao_xy,r0
+		mov 		#putchar,r5
+		jsr		r7,_SISTEMA
 
+		mov		#17,pos
+		mov		pos,r1
+		mov 		sentido,r0
+		mov 		#putchar,r5
+		jsr		r7,_SISTEMA
+
+		jmp		fim
 
 testa_direcao:
-		cmp		direcao,#87		;y +
-		beq		y+
+		cmp		direcao,#87		
+		beq		ymais
 
-		cmp		direcao,#65		;x -
-		beq		x-
+		cmp		direcao,#65		
+		beq		xmenos
 
-		cmp		direcao,#83		;y -
-		beq		y-
+		cmp		direcao,#83		
+		beq		ymenos
 
-		cmp		direcao,#68		;x +
-		beq		x+
+		cmp		direcao,#68		
+		beq		xmais
 
-		cmp		direcao,#119	;y +
-		beq		y+
+		cmp		direcao,#119
+		beq		ymais
 
-		cmp		direcao,#97	;x -
-		beq		x-
+		cmp		direcao,#97	
+		beq		xmenos
 
-		cmp		direcao,#115	;y -
-		beq		y-
+		cmp		direcao,#115	
+		beq		ymenos
 
-		cmp		direcao,#100	;x +
-		beq		x+
+		cmp		direcao,#100	
+		beq		xmais
 			
 
-y+:
-	
-	continuacao_exibir
-y-:
-
-	continuacao_exibir
-x-:
-
-	continuacao_exibir
-x+:
-
-	continuacao_exibir
+ymais:
+	mov		#89,direcao_xy
+	mov		#43,sentido
+	jmp	continuacao_exibir
+ymenos:
+	mov		#89,direcao_xy
+	mov		#45,sentido
+	jmp	continuacao_exibir
+xmenos:
+	mov		#45,sentido
+	mov		#88,direcao_xy
+	jmp	continuacao_exibir
+xmais:
+	mov		#43,sentido
+	mov		#88,direcao_xy
+	jmp	continuacao_exibir
 fim:
 	hlt
 	
