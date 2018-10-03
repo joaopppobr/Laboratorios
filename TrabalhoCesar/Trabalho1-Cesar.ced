@@ -691,6 +691,98 @@ exibe_info:
 	mov		#par2,r0
 	jsr		r7,_SISTEMA
 
+	mov		#26,pos
+	mov		pos,r1
+	mov 		inicial_x_sinal,r0
+	mov 		#putchar,r5
+	jsr		r7,_SISTEMA
+
+	mov		#27,pos
+	mov		pos,r1
+	mov 		inicial_x_cent_ASCII,r0
+	mov 		#putchar,r5
+	jsr		r7,_SISTEMA
+
+	mov		#28,pos
+	mov		pos,r1
+	mov 		inicial_x_dez_ASCII,r0
+	mov 		#putchar,r5
+	jsr		r7,_SISTEMA
+
+	
+	mov		#29,pos
+	mov		pos,r1
+	mov 		inicial_x_uni_ASCII,r0
+	mov 		#putchar,r5
+	jsr		r7,_SISTEMA
+
+	mov		#31,pos
+	mov		pos,r1
+	mov 		inicial_y_sinal,r0
+	mov 		#putchar,r5
+	jsr		r7,_SISTEMA
+
+	mov		#32,pos
+	mov		pos,r1
+	mov 		inicial_y_cent_ASCII,r0
+	mov 		#putchar,r5
+	jsr		r7,_SISTEMA
+
+	mov		#33,pos
+	mov		pos,r1
+	mov 		inicial_y_dez_ASCII,r0
+	mov 		#putchar,r5
+	jsr		r7,_SISTEMA
+
+	mov		#34,pos
+	mov		pos,r1
+	mov 		inicial_y_uni_ASCII,r0
+	mov 		#putchar,r5
+	jsr		r7,_SISTEMA
+
+	jmp		testa_direcao
+	continuacao_exibir:
+		
+
+
+testa_direcao:
+		cmp		direcao,#87		;y +
+		beq		y+
+
+		cmp		direcao,#65		;x -
+		beq		x-
+
+		cmp		direcao,#83		;y -
+		beq		y-
+
+		cmp		direcao,#68		;x +
+		beq		x+
+
+		cmp		direcao,#119	;y +
+		beq		y+
+
+		cmp		direcao,#97	;x -
+		beq		x-
+
+		cmp		direcao,#115	;y -
+		beq		y-
+
+		cmp		direcao,#100	;x +
+		beq		x+
+			
+
+y+:
+	
+	continuacao_exibir
+y-:
+
+	continuacao_exibir
+x-:
+
+	continuacao_exibir
+x+:
+
+	continuacao_exibir
 fim:
 	hlt
 	
@@ -716,14 +808,14 @@ ORG	25000
 
 conta_posicao:	dw	0
 
-inicial_x_sinal:	dab	' ',0
+inicial_x_sinal:	dw		0
 inicial_x_cen:	dw	0
 inicial_x_dez:	dw	0
 inicial_x_uni:	dw	0
 
-inicial_x_cent_ASCII:	dab	' ',0
-inicial_x_dez_ASCII:	dab	' ',0
-inicial_x_uni_ASCII:	dab	' ',0
+inicial_x_cent_ASCII:	dw		0
+inicial_x_dez_ASCII:	dw		0
+inicial_x_uni_ASCII:	dw		0
 
 inicial_x:	dw	0
 
@@ -733,11 +825,13 @@ inicial_y_dez:	dw	0
 inicial_y_uni:	dw	0
 
 
-inicial_y_cent_ASCII:	dab	' ',0
-inicial_y_dez_ASCII:	dab	' ',0
-inicial_y_uni_ASCII:	dab	' ',0
+inicial_y_cent_ASCII:	dw		0
+inicial_y_dez_ASCII:	dw		0
+inicial_y_uni_ASCII:	dw		0
 
 inicial_y:	dw	0
 
 direcao:	dab	' ',0
+direcao_xy:	dw	0
+sentido:		dw	0
 
