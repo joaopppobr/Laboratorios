@@ -1,0 +1,693 @@
+;----------------------------------------------------------------------------------------------------
+;
+;	Arquivo de referência, para implementação da APP
+;
+;----------------------------------------------------------------------------------------------------
+;
+
+;------------------------------------------------------------------------------
+; Definição de endereços necessários para o desenvolvimento da aplicação
+;------------------------------------------------------------------------------
+_APP:		equ	h0100		; inicio da APP
+_SISTEMA:	equ	h0080		; area das syscall
+
+
+;----------------------------------------------------------------------------------------------------
+;	Funções usadas para ler/escrever no relógio
+;		0			-> 		BOOL(r0)	kbhit(void)
+;		1			-> 		CHAR(r0)	getchar(void)
+;		2			-> 		UNSIGNED SHORT(r0)	gettime(void)
+;		3			-> 		VOID	putchar(CHAR(r0); INT(r1))
+;		4			-> 		VOID	putmsg(CHAR*(r0); INT(r1))
+;----------------------------------------------------------------------------------------------------
+;	r5 -> indica a função
+kbhit:		equ		0
+getchar:	equ		1
+gettime:	equ		2
+putchar:	equ		3
+putmsg:		equ		4
+
+
+	org	_APP
+	
+	;
+	; INICIAR SEU PROGRAMA AQUI
+	;
+	mov		#30,pos
+	mov		#putmsg,r5
+	clr		r1
+	mov		#msg_nome,r0
+	jsr		r7,_SISTEMA
+
+	mov		#getchar,r5			;			char = getchar();
+	jsr		r7,_SISTEMA	;aqui pra nao apagar direto o nome
+	
+	mov		#putmsg,r5
+	clr		r1
+	mov		#msg_limpa,r0
+	jsr		r7,_SISTEMA
+
+	mov		#putmsg,r5
+	clr		r1
+	mov		#msg_inicialx,r0
+	jsr		r7,_SISTEMA
+
+	mov		#putmsg,r5
+	mov		pos,r1
+	mov		#posicao_cursor,r0
+	jsr		r7,_SISTEMA
+	jmp		loop_coor_iniciais_x
+
+salva_x_sinal:
+	mov		r0,inicial_x_sinal
+	jmp		continua_insere_x
+
+salva_x_cent:
+	mov		r0,inicial_x_cent_ASCII
+	cmp		r0,#48
+	beq		move_000
+	cmp		r0,#49
+	beq		move_100
+	cmp		r0,#50
+	beq		move_200
+	
+	move_000:
+		mov	#0,inicial_x_cen
+		jmp	continua_insere_x
+	move_200:
+		mov	#200,inicial_x_cen
+		jmp	continua_insere_x
+	move_100:
+		mov	#100,inicial_x_cen
+		jmp	continua_insere_x
+
+salva_x_dez:
+	mov		r0,inicial_x_dez_ASCII
+	cmp		r0,#48
+	beq		move_0
+	cmp		r0,#49
+	beq		move_10
+	cmp		r0,#50
+	beq		move_20
+	cmp		r0,#51
+	beq		move_30
+	cmp		r0,#52
+	beq		move_40
+	cmp		r0,#53
+	beq		move_50
+	cmp		r0,#54
+	beq		move_60
+	cmp		r0,#55
+	beq		move_70
+	cmp		r0,#56
+	beq		move_80
+	cmp		r0,#57
+	beq		move_90 
+	
+	move_0:
+		mov	#0,inicial_x_dez
+		jmp	continua_insere_x
+	move_20:
+		mov	#20,inicial_x_dez
+		jmp	continua_insere_x
+	move_10:
+		mov	#10,inicial_x_dez
+		jmp	continua_insere_x
+	move_30:
+		mov	#30,inicial_x_dez
+		jmp	continua_insere_x
+	move_40:
+		mov	#40,inicial_x_dez
+		jmp	continua_insere_x
+	move_50:
+		mov	#50,inicial_x_dez
+		jmp	continua_insere_x
+	move_60:
+		mov	#60,inicial_x_dez
+		jmp	continua_insere_x
+	move_70:
+		mov	#70,inicial_x_dez
+		jmp	continua_insere_x
+	move_80:
+		mov	#80,inicial_x_dez
+		jmp	continua_insere_x
+	move_90:
+		mov	#90,inicial_x_dez
+		jmp	continua_insere_x
+
+salva_x_uni:
+	mov		r0,inicial_x_uni_ASCII
+	cmp		r0,#48
+	beq		move_0_uni
+	cmp		r0,#49
+	beq		move_1
+	cmp		r0,#50
+	beq		move_2
+	cmp		r0,#51
+	beq		move_3
+	cmp		r0,#52
+	beq		move_4
+	cmp		r0,#53
+	beq		move_5
+	cmp		r0,#54
+	beq		move_6
+	cmp		r0,#55
+	beq		move_7
+	cmp		r0,#56
+	beq		move_8
+	cmp		r0,#57
+	beq		move_9
+
+
+	move_0_uni:
+		mov	#0,inicial_x_uni
+		jmp	continua_insere_x
+	move_2:
+		mov	#2,inicial_x_uni
+		jmp	continua_insere_x
+	move_1:
+		mov	#1,inicial_x_uni
+		jmp	continua_insere_x
+	move_3:
+		mov	#3,inicial_x_uni
+		jmp	continua_insere_x
+	move_4:
+		mov	#4,inicial_x_uni
+		jmp	continua_insere_x
+	move_5:
+		mov	#5,inicial_x_uni
+		jmp	continua_insere_x
+	move_6:
+		mov	#6,inicial_x_uni
+		jmp	continua_insere_x
+	move_7:
+		mov	#7,inicial_x_uni
+		jmp	continua_insere_x
+	move_8:
+		mov	#8,inicial_x_uni
+		jmp	continua_insere_x
+	move_9:
+		mov	#9,inicial_x_uni
+		jmp	continua_insere_x
+
+
+
+salva_x_dez_jmp:
+	jmp		salva_x_dez
+salva_x_cent_jmp:
+	jmp		salva_x_cent
+salva_x_uni_jmp:
+	jmp		salva_x_uni
+coor_iniciais_y_jmp:
+	jmp		coor_iniciais_y
+salva_x_sinal_jmp:
+	jmp		salva_x_sinal
+
+loop_coor_iniciais_x:
+	mov		#getchar,r5			;			char = getchar();
+	jsr		r7,_SISTEMA
+
+	cmp		r0,#45
+	beq		continua_x
+
+	cmp		r0,#43
+	beq		continua_x
+
+	cmp		r0,#13
+	beq		coor_iniciais_y_jmp
+
+	cmp		r0,#8
+	beq		deleta_coor_x
+
+	cmp		r0,#57
+	bgt		loop_coor_iniciais_x
+
+	continua_x:
+
+	cmp		conta_posicao, #0
+	beq		salva_x_sinal_jmp
+
+	cmp		conta_posicao, #1
+	beq		salva_x_cent_jmp
+
+	cmp		conta_posicao,#2
+	beq		salva_x_dez_jmp
+
+	cmp		conta_posicao,#3
+	beq		salva_x_uni_jmp
+
+	continua_insere_x:
+
+		mov		pos,r1				;			putchar(pos, char);
+		mov		#putchar,r5
+		jsr		r7,_SISTEMA
+
+	
+		inc		pos
+		mov		#putmsg,r5
+		mov		pos,r1
+		mov		#posicao_cursor,r0
+		jsr		r7,_SISTEMA
+		
+		inc		conta_posicao
+		jmp		loop_coor_iniciais_x
+
+deleta_coor_x:
+	mov		#putmsg,r5
+	mov		pos,r1
+	mov		#deleta,r0
+	jsr		r7,_SISTEMA
+	
+	dec		pos
+
+	mov		#putmsg,r5
+	mov		pos,r1
+	mov		#deleta,r0
+	jsr		r7,_SISTEMA
+
+	mov		#putmsg,r5
+	mov		pos,r1
+	mov		#posicao_cursor,r0
+	jsr		r7,_SISTEMA
+		
+	dec		conta_posicao
+	jmp		loop_coor_iniciais_x
+
+salva_y_sinal:
+	mov		r0,inicial_y_sinal
+	jmp		continua_insere_y
+salva_y_cent:
+	mov		r0,inicial_y_cent_ASCII
+	cmp		r0,#48
+	beq		move_000_y
+	cmp		r0,#49
+	beq		move_100_y
+	cmp		r0,#50
+	beq		move_200_y
+	
+	move_000_Y:
+		mov	#0,inicial_y_cen
+		jmp	continua_insere_y
+	move_200_Y:
+		mov	#200,inicial_y_cen
+		jmp	continua_insere_y
+	move_100_y:
+		mov	#100,inicial_y_cen
+		jmp	continua_insere_y
+
+salva_y_dez:
+	mov		r0,inicial_y_dez_ASCII
+	cmp		r0,#48
+	beq		move_0_y
+	cmp		r0,#49
+	beq		move_10_y
+	cmp		r0,#50
+	beq		move_20_y
+	cmp		r0,#51
+	beq		move_30_y
+	cmp		r0,#52
+	beq		move_40_y
+	cmp		r0,#53
+	beq		move_50_y
+	cmp		r0,#54
+	beq		move_60_y
+	cmp		r0,#55
+	beq		move_70_y
+	cmp		r0,#56
+	beq		move_80_y
+	cmp		r0,#57
+	beq		move_90_y
+	
+	move_0_y:
+		mov	#0,inicial_y_dez
+		jmp	continua_insere_y
+	move_20_y:
+		mov	#20,inicial_y_dez
+		jmp	continua_insere_y
+	move_10_y:
+		mov	#10,inicial_y_dez
+		jmp	continua_insere_y
+	move_30_y:
+		mov	#30,inicial_y_dez
+		jmp	continua_insere_y
+	move_40_y:
+		mov	#40,inicial_y_dez
+		jmp	continua_insere_y
+	move_50_y:
+		mov	#50,inicial_y_dez
+		jmp	continua_insere_y
+	move_60_y:
+		mov	#60,inicial_y_dez
+		jmp	continua_insere_y
+	move_70_y:
+		mov	#70,inicial_y_dez
+		jmp	continua_insere_y
+	move_80_y:
+		mov	#80,inicial_y_dez
+		jmp	continua_insere_y
+	move_90_y:
+		mov	#90,inicial_y_dez
+		jmp	continua_insere_y
+
+salva_y_uni:
+	mov		r0,inicial_y_uni_ASCII
+	cmp		r0,#48
+	beq		move_0_uni_y
+	cmp		r0,#49
+	beq		move_1_y
+	cmp		r0,#50
+	beq		move_2_y
+	cmp		r0,#51
+	beq		move_3_y
+	cmp		r0,#52
+	beq		move_4_y
+	cmp		r0,#53
+	beq		move_5_y
+	cmp		r0,#54
+	beq		move_6_y
+	cmp		r0,#55
+	beq		move_7_y
+	cmp		r0,#56
+	beq		move_8_y
+	cmp		r0,#57
+	beq		move_9_y
+
+
+	move_0_uni_y:
+		mov	#0,inicial_y_uni
+		jmp	continua_insere_y
+	move_2_Y:
+		mov	#2,inicial_y_uni
+		jmp	continua_insere_y
+	move_1_y:
+		mov	#1,inicial_y_uni
+		jmp	continua_insere_y
+	move_3_y:
+		mov	#3,inicial_y_uni
+		jmp	continua_insere_y
+	move_4_y:
+		mov	#4,inicial_y_uni
+		jmp	continua_insere_y
+	move_5_y:
+		mov	#5,inicial_y_uni
+		jmp	continua_insere_y
+	move_6_y:
+		mov	#6,inicial_y_uni
+		jmp	continua_insere_y
+	move_7_y:
+		mov	#7,inicial_y_uni
+		jmp	continua_insere_y
+	move_8_y:
+		mov	#8,inicial_y_uni
+		jmp	continua_insere_y
+	move_9_y:
+		mov	#9,inicial_y_uni
+		jmp	continua_insere_y
+
+loop_coor_iniciais_y_jmp:
+	jmp		loop_coor_iniciais_y
+loop_direcao_jmp:
+	jmp		loop_direcao
+deleta_coor_y_jmp:
+	jmp	deleta_coor_y
+continua_y_jmp:
+	jmp		continua_y
+salva_coordenadas_jmp:
+	jmp		salva_coordenadas
+
+coor_iniciais_y:
+
+	clr		conta_posicao
+	mov		#30,pos
+	mov		#putmsg,r5
+	clr		r1
+	mov		#msg_inicialy,r0
+	jsr		r7,_SISTEMA
+
+	mov		#putmsg,r5
+	mov		pos,r1
+	mov		#posicao_cursor,r0
+	jsr		r7,_SISTEMA
+
+
+	loop_coor_iniciais_y:
+		mov		#getchar,r5			;			char = getchar();
+		jsr		r7,_SISTEMA
+
+		cmp		r0,#45
+		beq		continua_y_jmp
+
+		cmp		r0,#43
+		beq		continua_y_jmp
+
+		cmp		r0,#13
+		beq		salva_coordenadas_jmp
+
+		cmp		r0,#8
+		beq		deleta_coor_y_jmp
+
+		cmp		r0,#57
+		bgt		loop_coor_iniciais_y_jmp
+
+
+		continua_y:
+
+			cmp		conta_posicao, #0
+			beq		salva_y_sinal_jmp
+
+			cmp		conta_posicao, #1
+			beq		salva_y_cent_jmp
+
+			cmp		conta_posicao,#2
+			beq		salva_y_dez_jmp
+
+			cmp		conta_posicao,#3
+			beq		salva_y_uni_jmp
+
+			continua_insere_y:
+	
+					mov		pos,r1				;			putchar(pos, char);
+					mov		#putchar,r5
+					jsr		r7,_SISTEMA
+	
+		
+					inc		pos
+					mov		#putmsg,r5
+					mov		pos,r1
+					mov		#posicao_cursor,r0
+					jsr		r7,_SISTEMA
+			
+					inc		conta_posicao
+					jmp		loop_coor_iniciais_y
+
+
+salva_y_sinal_jmp:
+	jmp		salva_y_sinal
+salva_y_dez_jmp:
+	jmp		salva_y_dez
+salva_y_cent_jmp:
+	jmp		salva_y_cent
+salva_y_uni_jmp:
+	jmp		salva_y_uni
+		
+deleta_coor_y:
+	mov		#putmsg,r5
+	mov		pos,r1
+	mov		#deleta,r0
+	jsr		r7,_SISTEMA
+	
+	dec		pos
+
+	mov		#putmsg,r5
+	mov		pos,r1
+	mov		#deleta,r0
+	jsr		r7,_SISTEMA
+
+	mov		#putmsg,r5
+	mov		pos,r1
+	mov		#posicao_cursor,r0
+	jsr		r7,_SISTEMA
+
+	dec		conta_posicao
+	jmp		loop_coor_iniciais_y
+
+x_negativo_jmp:
+	jmp	x_negativo
+
+y_negativo_jmp:
+	jmp	y_negativo
+
+salva_coordenadas:
+
+	
+	ADD		inicial_x_cen,	inicial_x
+	ADD		inicial_x_dez,	inicial_x
+	ADD		inicial_x_uni,	inicial_x
+
+	cmp		inicial_x_sinal,#45	
+	beq		x_negativo_jmp
+	salva_y:
+		ADD		inicial_y_cen,	inicial_y
+		ADD		inicial_y_dez,	inicial_y
+		ADD		inicial_y_uni,	inicial_y
+		cmp		inicial_y_sinal,#45	
+		beq		y_negativo_jmp
+		jmp		loop_direcao_inicio
+
+
+x_negativo:
+	NEG	inicial_x
+	jmp	salva_y
+
+y_negativo:
+	NEG	inicial_y
+	jmp	loop_direcao_inicio
+
+loop_direcao_inicio:
+	mov		#putmsg,r5
+	clr		r1
+	mov		#msg_limpa,r0
+	jsr		r7,_SISTEMA
+	clr		conta_posicao
+	mov		#28,pos
+	mov		#putmsg,r5
+	clr		r1
+	mov		#msg_direcao,r0
+	jsr		r7,_SISTEMA
+
+	mov		#putmsg,r5
+	mov		pos,r1
+	mov		#posicao_cursor,r0
+	jsr		r7,_SISTEMA
+
+
+	loop_direcao:
+		mov		#getchar,r5			;			char = getchar();
+		jsr		r7,_SISTEMA
+
+		cmp		r0,#87
+		beq		continua_direcao_jmp
+
+		cmp		r0,#65
+		beq		continua_direcao_jmp
+
+		cmp		r0,#83
+		beq		continua_direcao_jmp
+
+		cmp		r0,#68
+		beq		continua_direcao_jmp
+
+		cmp		r0,#119
+		beq		continua_direcao_jmp
+
+		cmp		r0,#97
+		beq		continua_direcao_jmp
+
+		cmp		r0,#115
+		beq		continua_direcao_jmp
+
+		cmp		r0,#100
+		beq		continua_direcao_jmp
+
+		cmp		r0,#13
+		beq		fim_jmp
+
+		cmp		r0,#8
+		beq		deleta_direcao_jmp
+
+		jmp		loop_direcao
+
+		continua_direcao:
+
+				jmp		salva_direcao
+				mov		pos,r1				;			putchar(pos, char);
+				mov		#putchar,r5
+				jsr		r7,_SISTEMA
+	
+		
+				inc		pos
+				mov		#putmsg,r5
+				mov		pos,r1
+				mov		#posicao_cursor,r0
+				jsr		r7,_SISTEMA
+			
+				inc		conta_posicao
+				jmp		loop_direcao
+
+continua_direcao_jmp:
+	jmp		continua_direcao
+deleta_direcao_jmp:
+	jmp		deleta_direcao
+salva_direcao_jmp:
+	jmp		salva_direcao
+fim_jmp:
+	jmp		fim
+deleta_direcao:
+	mov		#putmsg,r5
+	mov		pos,r1
+	mov		#deleta,r0
+	jsr		r7,_SISTEMA
+	
+	dec		pos
+
+	mov		#putmsg,r5
+	mov		pos,r1
+	mov		#deleta,r0
+	jsr		r7,_SISTEMA
+
+	mov		#putmsg,r5
+	mov		pos,r1
+	mov		#posicao_cursor,r0
+	jsr		r7,_SISTEMA
+	
+	jmp		loop_direcao
+
+salva_direcao:
+	mov		r0,direcao
+	jmp		fim
+
+exibe_info:
+	
+fim:
+	hlt
+	
+
+
+msg_nome:	dab		'Joao Pedro Oliveira 304317', 0
+msg_limpa:	dab		'                                           ', 0
+msg_inicialx:	dab		'Insira a coordenada inicial X:', 0
+msg_inicialy:	dab		'Insira a coordenada inicial Y:       ', 0
+msg_direcao:		dab		'Direcao e sentido (W/A/S/D):'
+deleta:		dab		' ',0
+posicao_cursor:	dab	'_',0
+
+pos:	dw		0
+
+ORG	4998
+
+conta_posicao:	dw	0
+
+inicial_x_sinal:	dab	' ',0
+inicial_x_cen:	dw	0
+inicial_x_dez:	dw	0
+inicial_x_uni:	dw	0
+
+inicial_x_cen_ASCII:	dab	' ',0
+inicial_x_dez_ASCII:	dab	' ',0
+inicial_x_uni_ASCII:	dab	' ',0
+
+inicial_x:	dw	0
+
+inicial_y_sinal:	dab	' ',0
+inicial_y_cen:	dw	0
+inicial_y_dez:	dw	0
+inicial_y_uni:	dw	0
+
+
+inicial_y_cen_ASCII:	dab	' ',0
+inicial_y_dez_ASCII:	dab	' ',0
+inicial_y_uni_ASCII:	dab	' ',0
+
+inicial_y:	dw	0
+
+direcao:	dab	' ',0
