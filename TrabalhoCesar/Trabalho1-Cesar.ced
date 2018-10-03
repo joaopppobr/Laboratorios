@@ -662,15 +662,33 @@ exibe_info:
 	jsr		r7,_SISTEMA
 
 	mov		#putmsg,r5
-	mov		#9,pos
+	mov		#8,pos
 	mov		pos,r1
 	mov		#msg_sentido,r0
 	jsr		r7,_SISTEMA
 
 	mov		#putmsg,r5
-	mov		#21,pos
+	mov		#19,pos
 	mov		pos,r1
 	mov		#msg_coord,r0
+	jsr		r7,_SISTEMA
+
+	mov		#putmsg,r5
+	mov		#25,pos
+	mov		pos,r1
+	mov		#par1,r0
+	jsr		r7,_SISTEMA
+
+	mov		#putmsg,r5
+	mov		#30,pos
+	mov		pos,r1
+	mov		#vir,r0
+	jsr		r7,_SISTEMA
+
+	mov		#putmsg,r5
+	mov		#35,pos
+	mov		pos,r1
+	mov		#par2,r0
 	jsr		r7,_SISTEMA
 
 fim:
@@ -686,6 +704,9 @@ msg_direcao:		dab		'Direcao e sentido (W/A/S/D):',0
 msg_eixo:		dab		'Eixo:',0
 msg_sentido:		dab		'Sentido:',0
 msg_coord:		dab		'Coord:',0
+par1:	dab	'(',0
+par2:	dab	')',0
+vir:	dab	',',0
 deleta:		dab		' ',0
 posicao_cursor:	dab	'_',0
 
