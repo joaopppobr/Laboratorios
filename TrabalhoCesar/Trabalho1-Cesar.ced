@@ -647,6 +647,11 @@ salva_direcao:
 	jmp		exibe_info
 
 exibe_info:
+
+	mov		#gettime,r5			;			char = getchar();
+	jsr		r7,_SISTEMA
+	mov		r0,time
+
 	mov		#putmsg,r5
 	clr		r1
 	mov		#msg_limpa,r0
@@ -754,7 +759,121 @@ exibe_info:
 		mov 		#putchar,r5
 		jsr		r7,_SISTEMA
 
-		jmp		fim
+		jmp		movimento_loop
+
+exibe_info_1:
+
+	mov		#gettime,r5			;			char = getchar();
+	jsr		r7,_SISTEMA
+	mov		r0,time
+
+	mov		#putmsg,r5
+	clr		r1
+	mov		#msg_limpa,r0
+	jsr		r7,_SISTEMA
+
+	clr		conta_posicao
+
+	mov		#28,pos
+
+	mov		#putmsg,r5
+	clr		r1
+	mov		#msg_eixo,r0
+	jsr		r7,_SISTEMA
+
+	mov		#putmsg,r5
+	mov		#8,pos
+	mov		pos,r1
+	mov		#msg_sentido,r0
+	jsr		r7,_SISTEMA
+
+	mov		#putmsg,r5
+	mov		#19,pos
+	mov		pos,r1
+	mov		#msg_coord,r0
+	jsr		r7,_SISTEMA
+
+	mov		#putmsg,r5
+	mov		#25,pos
+	mov		pos,r1
+	mov		#par1,r0
+	jsr		r7,_SISTEMA
+
+	mov		#putmsg,r5
+	mov		#30,pos
+	mov		pos,r1
+	mov		#vir,r0
+	jsr		r7,_SISTEMA
+
+	mov		#putmsg,r5
+	mov		#35,pos
+	mov		pos,r1
+	mov		#par2,r0
+	jsr		r7,_SISTEMA
+
+	mov		#26,pos
+	mov		pos,r1
+	mov 		inicial_x_sinal,r0
+	mov 		#putchar,r5
+	jsr		r7,_SISTEMA
+
+	mov		#27,pos
+	mov		pos,r1
+	mov 		inicial_x_cent_ASCII,r0
+	mov 		#putchar,r5
+	jsr		r7,_SISTEMA
+
+	mov		#28,pos
+	mov		pos,r1
+	mov 		inicial_x_dez_ASCII,r0
+	mov 		#putchar,r5
+	jsr		r7,_SISTEMA
+
+	
+	mov		#29,pos
+	mov		pos,r1
+	mov 		inicial_x_uni_ASCII,r0
+	mov 		#putchar,r5
+	jsr		r7,_SISTEMA
+
+	mov		#31,pos
+	mov		pos,r1
+	mov 		inicial_y_sinal,r0
+	mov 		#putchar,r5
+	jsr		r7,_SISTEMA
+
+	mov		#32,pos
+	mov		pos,r1
+	mov 		inicial_y_cent_ASCII,r0
+	mov 		#putchar,r5
+	jsr		r7,_SISTEMA
+
+	mov		#33,pos
+	mov		pos,r1
+	mov 		inicial_y_dez_ASCII,r0
+	mov 		#putchar,r5
+	jsr		r7,_SISTEMA
+
+	mov		#34,pos
+	mov		pos,r1
+	mov 		inicial_y_uni_ASCII,r0
+	mov 		#putchar,r5
+	jsr		r7,_SISTEMA
+
+	continuacao_exibir_1:
+		mov		#6,pos
+		mov		pos,r1
+		mov 		direcao_xy,r0
+		mov 		#putchar,r5
+		jsr		r7,_SISTEMA
+
+		mov		#17,pos
+		mov		pos,r1
+		mov 		sentido,r0
+		mov 		#putchar,r5
+		jsr		r7,_SISTEMA
+
+		jmp		movimento_loop
 
 testa_direcao:
 		cmp		direcao,#87		
@@ -780,7 +899,6 @@ testa_direcao:
 
 		cmp		direcao,#100	
 		beq		xmais
-			
 
 ymais:
 	mov		#89,direcao_xy
@@ -798,6 +916,93 @@ xmais:
 	mov		#43,sentido
 	mov		#88,direcao_xy
 	jmp	continuacao_exibir
+
+movimento_loop:
+	mov		#kbhit,r5
+	jsr		r7,_SISTEMA
+	tst		r0
+	beq		continua_loop
+	
+	mov		#getchar,r5
+	jsr		r7,_SISTEMA
+	mov		r0,char
+
+	continua_loop:
+		mov		#gettime,r5
+		jsr		r7,_SISTEMA
+		cmp		r0,time
+		beq		movimento_loop
+		mov		r0,time
+
+		jmp_movimenta:
+
+			mov		#getchar,r5
+			jsr		r7,_SISTEMA
+
+			cmp		r0,#87
+			beq		mov_ymais_jmp
+
+			cmp		r0,#65
+			beq		mov_xmenos_jmp
+
+			cmp		r0,#83
+			beq		mov_ymenos_jmp
+
+			cmp		r0,#68
+			beq		mov_xmais_jmp
+
+			cmp		r0,#119
+			beq		mov_ymais_jmp
+
+			cmp		r0,#97
+			beq		mov_xmenos_jmp
+
+			cmp		r0,#115
+			beq		mov_ymenos_jmp
+	
+			cmp		r0,#100
+			beq		mov_xmais_jmp
+
+			cmp		r0,#112
+			beq		fim
+
+			cmp		r0,#80
+			beq		fim
+
+mov_ymais_jmp:
+	jmp		mov_ymais
+mov_ymenos_jmp:
+	jmp		mov_ymenos
+mov_xmenos_jmp:
+	jmp		mov_xmenos
+mov_xmais_jmp:
+	jmp		mov_xmais
+
+
+mov_ymais:
+	mov		#89,direcao_xy
+	mov		#43,sentido
+	inc		inicial_y_uni_ASCII
+	inc		inicial_y_uni
+	jmp		exibe_info_1
+mov_ymenos:
+	mov		#89,direcao_xy
+	mov		#45,sentido
+	dec		inicial_y_uni_ASCII
+	dec		inicial_y_uni
+	jmp		exibe_info_1
+mov_xmenos:
+	mov		#45,sentido
+	mov		#88,direcao_xy
+	dec		inicial_x_uni_ASCII
+	dec		inicial_x_uni		
+	jmp		exibe_info_1
+mov_xmais:
+	mov		#43,sentido
+	mov		#88,direcao_xy
+	inc		inicial_x_uni_ASCII
+	inc		inicial_x_uni
+	jmp		exibe_info_1
 fim:
 	hlt
 	
@@ -850,3 +1055,7 @@ direcao:	dab	' ',0
 direcao_xy:	dw	0
 sentido:		dw	0
 
+	
+time:	dw		0
+char:	dw		0
+	
