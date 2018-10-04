@@ -33,6 +33,7 @@ putmsg:		equ		4
 	;
 	; INICIAR SEU PROGRAMA AQUI
 	;
+inicio:
 	mov		#30,pos
 	mov		#putmsg,r5
 	clr		r1
@@ -964,11 +965,13 @@ movimento_loop:
 			beq		mov_xmais_jmp
 
 			cmp		r0,#112
-			beq		fim
+			beq		interrompido_jmp
 
 			cmp		r0,#80
-			beq		fim
+			beq		interrompido_jmp
 
+jmp_fim:
+	jmp	fim
 mov_ymais_jmp:
 	jmp		mov_ymais
 mov_ymenos_jmp:
@@ -977,42 +980,166 @@ mov_xmenos_jmp:
 	jmp		mov_xmenos
 mov_xmais_jmp:
 	jmp		mov_xmais
+interrompido_jmp:
+	jmp		interrompido
 
+interrompido:
+	mov		#putmsg,r5
+	clr		r1
+	mov		#msg_interrompe,r0
+	jsr		r7,_SISTEMA
 
+	mov		#getchar,r5			;			char = getchar();
+	jsr		r7,_SISTEMA
+
+	cmp		r0,#112
+	beq		jmp_fim
+
+	cmp		r0,#80
+	beq		jmp_fim
+
+	cmp		r0,#13
+	beq		jmp_coor
+
+jmp_coor:
+	jmp		inicio
 mov_ymais:
+
+	cmp		inicial_y_uni,#9
+	beq		ymais_dezena
 	mov		#89,direcao_xy
 	mov		#43,sentido
 	inc		inicial_y_uni_ASCII
 	inc		inicial_y_uni
 	jmp		exibe_info_1
+
+	ymais_dezena:
+		cmp		inicial_y_dez_ASCII,#57
+		beq		ymais_cent
+		mov		#89,direcao_xy
+		mov		#43,sentido
+		inc		inicial_y_dez_ASCII
+		inc		inicial_y_dez
+		mov		#0,	inicial_y_uni
+		mov		#48,	inicial_y_uni_ASCII
+		jmp		exibe_info_1
+	ymais_cent:
+		mov		#89,direcao_xy
+		mov		#43,sentido
+		inc		inicial_y_cent_ASCII
+		inc		inicial_y_cen
+		mov		#0,	inicial_y_dez
+		mov		#48,	inicial_y_dez_ASCII
+		mov		#0,	inicial_y_uni
+		mov		#48,	inicial_y_uni_ASCII
+		jmp		exibe_info_1
+
 mov_ymenos:
+
+	cmp		inicial_y_uni,#0
+	beq		ymenos_dezena
+
 	mov		#89,direcao_xy
 	mov		#45,sentido
 	dec		inicial_y_uni_ASCII
 	dec		inicial_y_uni
 	jmp		exibe_info_1
+
+	ymenos_dezena:
+		cmp		inicial_y_dez,#0
+		beq		ymenos_cent
+		mov		#89,direcao_xy
+		mov		#45,sentido
+		dec		inicial_y_dez_ASCII
+		dec 		inicial_y_dez
+		mov		#9,inicial_y_uni
+		mov		#57,inicial_y_uni_ASCII
+		jmp		exibe_info_1
+	ymenos_cent:
+		mov		#89,direcao_xy
+		mov		#45,sentido
+		dec		inicial_y_cent_ASCII
+		dec		inicial_y_cen
+		mov		#9,inicial_y_uni
+		mov		#57,inicial_y_uni_ASCII
+		mov		#9,inicial_y_dez
+		mov		#57,inicial_y_dez_ASCII
+		jmp		exibe_info_1
+
+	
 mov_xmenos:
+
+	cmp		inicial_x_uni,#0
+	beq		xmenos_dezena
+
 	mov		#45,sentido
 	mov		#88,direcao_xy
 	dec		inicial_x_uni_ASCII
 	dec		inicial_x_uni		
 	jmp		exibe_info_1
-mov_xmais:
+	
+	xmenos_dezena:
+		cmp		inicial_x_dez,#0
+		beq		xmenos_cent
+		mov		#88,direcao_xy
+		mov		#45,sentido
+		dec		inicial_x_dez_ASCII
+		dec		inicial_x_dez
+		mov		#9,inicial_x_uni
+		mov		#57,inicial_x_uni_ASCII
+		jmp		exibe_info_1
+	xmenos_cent:
+		mov		#88,direcao_xy
+		mov		#45,sentido
+		dec		inicial_x_cent_ASCII
+		dec		inicial_x_cen
+		mov		#9,inicial_x_uni
+		mov		#57,inicial_x_uni_ASCII
+		mov		#9,inicial_x_dez
+		mov		#57,inicial_x_dez_ASCII
+		jmp		exibe_info_1
+	
+mov_xmais:	
+	cmp		inicial_x_uni,#9
+	beq		xmais_dezena
+
 	mov		#43,sentido
 	mov		#88,direcao_xy
 	inc		inicial_x_uni_ASCII
 	inc		inicial_x_uni
 	jmp		exibe_info_1
+
+	xmais_dezena:
+		cmp		inicial_x_dez_ASCII,#57
+		beq		xmais_cent
+		mov		#88,direcao_xy
+		mov		#43,sentido
+		inc		inicial_x_dez_ASCII
+		inc		inicial_x_dez
+		mov		#0,	inicial_x_uni
+		mov		#48,	inicial_x_uni_ASCII
+		jmp		exibe_info_1
+	xmais_cent:
+		mov		#88,direcao_xy
+		mov		#43,sentido
+		inc		inicial_x_cent_ASCII
+		inc		inicial_x_cen
+		mov		#0,	inicial_x_dez
+		mov		#48,	inicial_x_dez_ASCII
+		mov		#0,	inicial_x_uni
+		mov		#48,	inicial_x_uni_ASCII
+		jmp		exibe_info_1
 fim:
 	hlt
 	
 
 
-msg_nome:	dab		'Joao Pedro Oliveira 304317', 0
+msg_nome:	dab		'Joao Pedro Oliveira 304317          ', 0
 msg_limpa:	dab		'                                           ', 0
 msg_inicialx:	dab		'Insira a coordenada inicial X:', 0
 msg_inicialy:	dab		'Insira a coordenada inicial Y:       ', 0
 msg_direcao:		dab		'Direcao e sentido (W/A/S/D):',0
+msg_interrompe:	dab		'Programa interrompido(Enter/P)         ',0
 msg_eixo:		dab		'Eixo:',0
 msg_sentido:		dab		'Sentido:',0
 msg_coord:		dab		'Coord:',0
